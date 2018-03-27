@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 13:29:18 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-21 09:39:29
+ * @Last Modified time: 2018-03-27 17:47:56
  */
 
 /**
@@ -22,12 +22,12 @@
                                 <el-button @click="addFunctionToggle" type="primary" size="mini">新增功能</el-button>
                                 <el-button @click="remove" type="danger" size="mini">删除</el-button>
                                 <el-button @click="importData" type="primary" size="mini">导入</el-button>
-                                <download 
+                                <export-data 
                                     fileName="功能模块.json" 
                                     :propMethod="exportMethod" 
                                     type="primary" 
                                     size="mini">
-                                </download>
+                                </export-data>
                             </el-button-group>
                         </el-col>
                         <el-col :span="24">
@@ -42,17 +42,17 @@
             <el-col :span="18" class="padding-left-20">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <el-button-group class="fr" style="margin-top:5px;margin-right:10px;">
-                            <el-button size="medium" icon="bimicon-roundaddlight" class="custom-medium-btn primary-btn" @click="revoke">撤销</el-button>
-                            <el-button size="medium" icon="bimicon-edit" class="custom-medium-btn primary-btn" @click="save">保存</el-button>
+                        <el-button-group class="fl" style="margin-top:20px;margin-left:40px;">
+                            <el-button size="mini" type="primary" :disabled="operatable" @click="revoke">撤销</el-button>
+                            <el-button size="mini" type="primary" :disabled="operatable" @click="save">保存</el-button>
                         </el-button-group>
                     </div>
-                    <el-form :model="functionForm" :rules="rules" ref="functionForm" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="functionForm" :rules="rules" ref="functionForm" label-width="100px" :validate-on-rule-change="false">
                         <el-form-item label="名称：" class="form-item-width" prop="name">
                             <el-input v-model="functionForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="编码：" class="form-item-width" prop="code">
-                            <el-input v-model="functionForm.code" :disabled="isEditable"></el-input>
+                            <el-input v-model="functionForm.code" :disabled="isEditable" placeholder="可自动生成"></el-input>
                         </el-form-item>
                         <template v-if="!isModule">
                             <el-form-item label="类型：" class="form-item-width">
@@ -92,7 +92,7 @@
 
 <script>
 import tree from '@/components/Tree/FuncTree'
-import download from '@/components/DownLoad'
+import exportData from '@/components/DownLoad'
 import importData from '@/components/ImportData'
 import {
     createFunc,
@@ -111,7 +111,7 @@ export default {
     name: 'function-controller',
     components: {
         tree,
-        download,
+        exportData,
         importData
     },
     data() {
@@ -121,11 +121,11 @@ export default {
             rules: {},
             isModule: true, // 是否是模块
             isSystemFunction: true, // 是否是系统功能
-            isSave: false, // 是否保存
             exportMethod: exportFunc, // 导出接口
             isEditable: true, // 是否可修改
             uploadMethod: importFunc, // 上传文件接口
-            validatorMethod: checkImportRelation // 校验是否关联接口
+            validatorMethod: checkImportRelation, // 校验是否关联接口
+            operatable: false // 是否可操作撤销修
         }
     },
     watch: {
@@ -140,11 +140,11 @@ export default {
     methods: {
         // 监听树改变
         onTreeChange(val) {
-            this.isSave = false
             this.treeData = val
             this.functionForm = val
             this.isEditable = true
             this.functionForm.cancelEdit()
+            this.operatable = false // 可进行撤销保存操作
             if (val.moduleType === 'FunctionCategory') {
                 this.isModule = true
                 return
@@ -175,12 +175,10 @@ export default {
             this.functionForm = new Module()
             this.isModule = true
             this.isEditable = false
+            this.operatable = false // 可进行撤销保存操作
             this.rules = {
                 name: [
                     { required: true, trigger: 'blur', validator: this.functionForm.validatorOf('name') }
-                ],
-                code: [
-                    { required: true, trigger: 'blur', validator: this.functionForm.validatorOf('code') }
                 ]
             }
         },
@@ -192,12 +190,10 @@ export default {
             this.functionForm.templateType = 'FORM'
             this.isModule = false
             this.isEditable = false
+            this.operatable = false // 可进行撤销保存操作
             this.rules = {
                 name: [
                     { required: true, trigger: 'blur', validator: this.functionForm.validatorOf('name') }
-                ],
-                code: [
-                    { required: true, trigger: 'blur', validator: this.functionForm.validatorOf('code') }
                 ]
             }
         },
@@ -219,10 +215,10 @@ export default {
                 const data = this.functionForm
                 const res = await createFuncCategory(data)
                 this.$message.success('添加成功')
-                this.isSave = true
-                this.$refs['tree'].insertAfter(res, this.treeData.id)
+                this.operatable = true // 不可进行撤销保存操作
+                this.$refs['tree'].insertAfter(res)
             } catch (e) {
-                this.$message.error('添加失败')
+                this.$message.error(`添加失败：${e.message}`)
                 console.warn(`新建模块: ${e}`)
             }
         },
@@ -232,10 +228,10 @@ export default {
                 const data = this.functionForm
                 data.children = []
                 await updateFuncCategory(data)
-                this.isSave = true
+                this.operatable = true // 不可进行撤销保存操作
                 this.$message.success('修改成功')
             } catch (e) {
-                this.$message.error('修改是失败')
+                this.$message.error(`修改失败: ${e.message}`)
                 console.warn(`修改模块: ${e}`)
             }
         },
@@ -246,10 +242,10 @@ export default {
                 data.catCode = this.treeData.code
                 const res = await createFunc(data)
                 this.$refs['tree'].append(res, this.treeData.id)
-                this.isSave = true
+                this.operatable = true // 不可进行撤销保存操作
                 this.$message.success('添加成功')
             } catch (e) {
-                this.$message.error('添加失败')
+                this.$message.error(`添加失败: ${e.message}`)
                 console.warn(`新建功能: ${e}`)
             }
         },
@@ -259,10 +255,10 @@ export default {
                 const data = this.functionForm
                 data.children = []
                 await updateFunc(data)
-                this.isSave = true
+                this.operatable = true // 不可进行撤销保存操作
                 this.$message.success('修改成功')
             } catch (e) {
-                this.$message.error('修改是失败')
+                this.$message.error(`修改失败: ${e.message}`)
                 console.warn(`修改功能: ${e}`)
             }
         },
@@ -273,7 +269,7 @@ export default {
                 this.$refs['tree'].remove()
                 this.$message.success('删除成功')
             } catch (e) {
-                this.$message.error('删除失败')
+                this.$message.error(`修改失败: ${e.message}`)
                 console.warn(`删除模块: ${e}`)
             }
         },
@@ -284,22 +280,28 @@ export default {
                 this.$refs['tree'].remove()
                 this.$message.success('删除成功')
             } catch (e) {
+                this.$message.error(`修改失败: ${e.message}`)
                 console.warn(`删除功能: ${e}`)
             }
         },
         // 删除按钮
         async remove() {
             try {
+                if (!this.treeData.id) {
+                    this.$message.warning('请选择要删除的条目')
+                    return
+                }
+
+                if (this.treeData.hasChild) {
+                    this.$message.warning('当前节点包含子节点，不能进行删除操作')
+                    return
+                }
+
                 await this.$confirm('此操作将永久删除该条信息, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 })
-
-                if (!this.treeData.id) {
-                    this.$message.warn('请选择要删除的条目')
-                    return
-                }
 
                 if (this.treeData.moduleType === 'FunctionCategory') {
                     this.removeModule()
@@ -311,23 +313,29 @@ export default {
             }
         },
         // 保存按钮
-        save() {
-            if (this.functionForm.id === -1) {
-                if (this.functionForm.hasOwnProperty('_catCode')) {
-                    this.addFunc() // 新建功能
-                    this.functionForm.endEdit()
-                    return
+        async save() {
+            try {
+                const valid = await this.$refs['functionForm'].validate()
+                if (valid) {
+                    if (this.functionForm.id === -1) {
+                        if (this.functionForm.hasOwnProperty('_catCode')) {
+                            this.addFunc() // 新建功能
+                        } else {
+                            this.addModule() // 新建模块
+                        }
+                        this.functionForm.endEdit()
+                    } else {
+                        if (this.functionForm.moduleType === 'FunctionCategory') {
+                            this.editModule() // 修改模块
+                        } else {
+                            this.editFunc() // 修改功能
+                        }
+                        this.functionForm.endEdit()
+                    }
                 }
-                this.addModule() // 新建模块
-                this.functionForm.endEdit()
-            } else {
-                if (this.functionForm.moduleType === 'FunctionCategory') {
-                    this.editModule() // 修改模块
-                    this.functionForm.endEdit()
-                    return
-                }
-                this.editFunc() // 修改功能
-                this.functionForm.endEdit()
+            } catch (e) {
+                console.warn(`保存: ${JSON.stringify(e)}`)
+                return false
             }
         },
         // 导入按钮
@@ -352,6 +360,7 @@ export default {
     }
     .box-card {
         height: 820px;
+        overflow-y: auto;
     }
 }
 </style>

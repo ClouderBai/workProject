@@ -1,8 +1,8 @@
 /*
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 17:16:24 
- * @Last Modified by:   zhanglianhao 
- * @Last Modified time: 2018-03-20 17:16:24 
+ * @Last Modified by: zhanglianhao
+ * @Last Modified time: 2018-03-27 18:05:13
  */
 /**
 |--------------------------------------------------
@@ -25,14 +25,25 @@
                     </el-button>
                 </el-button-group>
                 <el-button-group class="margin-bottom-20 float-right">
-                    <el-button size="medium" icon="bimicon-roundaddlight" class="custom-medium-btn primary-btn" @click="backup">备份</el-button>
-                    <el-button size="medium" icon="bimicon-roundaddlight" class="custom-medium-btn primary-btn" @click="recovery">恢复</el-button>
+                    <export-data 
+                        fileName="编码备份.json" 
+                        :propMethod="exportMethod" 
+                        type="" 
+                        btnName="备份"
+                        size="medium" 
+                        iconType="bimicon-down"
+                        btnClass="custom-medium-btn primary-btn">
+                    </export-data>
+                    <el-button size="medium" icon="bimicon-roundaddlight" class="custom-medium-btn primary-btn" @click="importData">恢复</el-button>
                 </el-button-group>
             </el-col>
             <el-col :span="24">
-                <codeTable @rowChange="onRowChange" @selectChange="onSelectChange" ref="codeTable"></codeTable>
-                <codeDialog ref ="codeDialog"></codeDialog>
-                <backup @uploadFile="onImportData" ref="backup"></backup>
+                <!-- 编码 table -->
+                <code-table @rowChange="onRowChange" @selectChange="onSelectChange" ref="codeTable"></code-table>
+                <!-- 编码 dialog -->
+                <code-dialog ref ="codeDialog"></code-dialog>
+                <!-- 恢复（导入） -->
+                <import-data  :uploadApi="uploadMehtod" ref="importData" @refresh="onRefresh"></import-data>
             </el-col>
         </el-row>
     </div>
@@ -42,30 +53,43 @@
 import codeTable from '@/components/Table/CodeManager'
 import codeDialog from '@/components/Dialog/Code'
 import DialogOptions from '@/components/Dialog/DialogOptions'
-import backup from '@/components/Backup'
+import exportData from '@/components/DownLoad'
+import importData from '@/components/ImportData'
 import { exportCode, importCode } from '@/api/code'
 export default {
     name: 'codeManager',
     components: {
         codeTable,
         codeDialog,
-        backup
+        exportData,
+        importData
+    },
+    computed: {
+        // 控制删除按钮
+        isDeletable() {
+            return !(this.selectedData.length > 0)
+        },
+        // 控制修改按钮
+        isEditable() {
+            return !(Object.keys(this.tableRowData).length > 0)
+        }
     },
     data() {
         return {
             tableRowData: {},
-            isEditable: true,
-            isDeletable: true,
-            addData: ''
+            selectedData: {},
+            addData: '',
+            exportMethod: exportCode, // 导出接口
+            uploadMehtod: importCode // 导入接口
         }
     },
     methods: {
         onRowChange(row) {
             this.tableRowData = row
-            this.isEditable = false
         },
         onSelectChange(val) {
-            this.isDeletable = false
+            // 判断是否显示删除按钮
+            this.selectedData = val
         },
         // 新增编码
         addCode() {
@@ -73,7 +97,9 @@ export default {
             const self = this
             this.$refs['codeDialog'].onClosed = function(payload) {
                 if (payload.option === DialogOptions.CONFIRM) {
-                    self.$refs['codeTable'].addCode(payload.data) // 接收dialog的新增code数据
+                    if (payload.data) {
+                        self.$refs['codeTable'].addCode(payload.data) // 接收dialog的新增code数据
+                    }
                 }
             }
         },
@@ -85,32 +111,13 @@ export default {
         removeCode() {
             this.$refs['codeTable'].remove()
         },
-        // 恢复
-        recovery() {
-            this.$refs['backup'].importData()
+        // 导入数据(按钮)
+        importData() {
+            this.$refs['importData'].importData()
         },
-        // 备份(导出)
-        async backup() {
-            try {
-                const data = await exportCode()
-                this.$refs['backup'].exportData(data)
-            } catch (e) {
-                console.warn(`备份: ${e}`)
-            }
-        },
-        // 恢复(导入)
-        async onImportData(file, dom) {
-            try {
-                const formData = new FormData()
-                formData.append('file', file)
-                await importCode(formData)
-                this.$message.success('恢复成功! ')
-            } catch (e) {
-                this.$message.error('恢复失败! ')
-                console.warn(`恢复数据: ${e}`)
-            } finally {
-                dom.value = '' // 清除文件
-            }
+        // 刷新表格数据
+        onRefresh(data) {
+            this.$refs['codeTable'].refresh(data)
         }
     }
 }

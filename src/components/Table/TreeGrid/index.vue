@@ -2,14 +2,16 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-14 15:13:58 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-19 11:52:13
+ * @Last Modified time: 2018-03-26 18:07:23
  */
 
 <template>
     <el-table 
         :data="data" 
         style="width: 100%" 
+        :height="height"
         stripe
+        border
         @row-click="handleCurrentChange"
         tooltip-effect="dark"
         highlight-current-row
@@ -77,6 +79,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        height: {
+            type: Number,
+            default: 700
         }
     },
     computed: {

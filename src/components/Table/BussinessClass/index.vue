@@ -1,8 +1,8 @@
 /*
  * @Author: ShaXin 
  * @Date: 2018-01-29 10:21:56 
- * @Last Modified by: ShaXin
- * @Last Modified time: 2018-01-29 13:33:19
+ * @Last Modified by: zhanglianhao
+ * @Last Modified time: 2018-03-27 15:09:59
  */
 
 /*
@@ -44,13 +44,11 @@
         </el-table-column>
         <el-table-column
             prop="name"
-            label="类别姓名"
-            sortable>
+            label="类别姓名">
         </el-table-column>
         <el-table-column
             prop="code"
             label="类别编码"
-            sortable
             width="240"
             show-overflow-tooltip>
         </el-table-column>
@@ -58,92 +56,87 @@
 </template>
 <script>
 import {
-  fetchTableData,
-  deleteBizType,
-  searchBizTypeByCondition,
-  getAllLevelType,
-  updateBizType
-} from "@/api/org";
-import OrgBusType from "@/model/OrgBusType";
+    fetchTableData,
+    deleteBizType,
+    searchBizTypeByCondition
+} from '@/api/org'
+import OrgBusType from '@/model/OrgBusType'
 export default {
-    data () {
+    data() {
         return {
-            multipleSelection: [], //多选值
+            multipleSelection: [], // 多选值
             tableData: [], // b表格数据
             tableDataCopy: [], // b表格数据拷贝
-            loading: true, // table
+            loading: true // table
         }
     },
-    mounted () {
+    mounted() {
         this.init()
     },
     methods: {
         // 初始化
-        init(){
+        init() {
             this.getBussinessList()
         },
         async getBussinessList() {
-            this.loading = true;
-            this.tableData = await fetchTableData();
-            this.loading = false;
+            this.loading = true
+            this.tableData = await fetchTableData()
+            this.loading = false
         },
-        
+
         // 搜索
         async searchByVal(v) {
-            this.loading = true;
+            this.loading = true
             var data = {
                 filter: v
-            };
-            this.tableData = await searchBizTypeByCondition(data);
-            this.loading = false;
+            }
+            this.tableData = await searchBizTypeByCondition(data)
+            this.loading = false
         },
 
         // 多选列表
         handleSelectionChange(val) {
-            this.multipleSelection = val;
-            this.$emit('tableSelection',val)
+            this.multipleSelection = val
+            this.$emit('tableSelection', val)
         },
 
         // 选择table表格
         handleCurrentChange(val) {
-            this.currentRow = val;
-            this.$emit('tableCurrentRow',val)
+            this.currentRow = val
+            this.$emit('tableCurrentRow', val)
         },
-        getCurrentRow(){
+        getCurrentRow() {
             return this.currentRow
         },
         // 删除表格
-        deleteTableCell(){
-          var arr = [];
-          for (var i = 0; i < this.multipleSelection.length; i++) {
-            arr.push(this.multipleSelection[i].code);
-          }
+        deleteTableCell() {
+            var arr = []
+            for (var i = 0; i < this.multipleSelection.length; i++) {
+                arr.push(this.multipleSelection[i].code)
+            }
             deleteBizType(arr)
                 .then(res => {
-                this.$store.commit("CLOSE_WAITING");
-                this.$message({
-                    message: "删除成功",
-                    type: "success"
-                });
-                this.currentRow = "";
-                this.getBussinessList();
+                    this.$store.commit('CLOSE_WAITING')
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    })
+                    this.currentRow = ''
+                    this.getBussinessList()
                 })
                 .catch(err => {
-                this.$store.commit("CLOSE_WAITING");
-                this.$message({
-                    message: "删除失败 请稍后重试",
-                    type: "error"
-                });
-                });
+                    this.$store.commit('CLOSE_WAITING')
+                    this.$message.error(`删除失败: ${err.message}`)
+                })
         },
         insert(item) {
-            console.log("insert"+item instanceof OrgBusType)
+            console.log(item)
             if (!(item instanceof OrgBusType)) {
-                item = new OrgBusType().init(item);
+                item = new OrgBusType().init(item)
             }
-            this.tableData.push(item);
-        },
-    },
+            this.tableData.push(item)
+        }
+    }
 
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
 	<el-row>
-		<el-col :span="2">
+		<el-col :span="1">
 			<div id="nodeTool" style="padding-top:50px ;">
 				<!--初始化根据设置显示可拖拽节点-->
 				<div><el-button size="mini" @click="buildNodeTools('Start')">开</el-button></div>
@@ -16,7 +16,7 @@
 				<div><el-button size="mini" @click="buildNodeTools('Subprocess')">子</el-button></div>
 			</div>
 		</el-col>
-		<el-col :span="20">
+		<el-col :span="16">
 			<div id="toolbar">
 				<el-button-group>
                     <el-button size="mini" icon="" @click="create()">新建</el-button>
@@ -34,9 +34,9 @@
 				<div id="snapContainer" class="fd-canvas-container" style='height: 750px;'></div>
 			</div>
 		</el-col>
-		<el-col :span="2">
+		<el-col :span="7">
 			<div>
-				<config-list></config-list>
+				<flow-property></flow-property>
 			</div>
 		</el-col>
         <template>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import configList from './config/configList'
+import flowProperty from './config/flowProperty'
 
 import * as event from './main/Event.js'
 import Designer from './Designer.js'
@@ -62,9 +62,9 @@ import HumanTask from '@/model/flow/HumanTask' // 人工任务类
 
 export default {
     components: {
-        configList,
         humanTaskDialog,
-        countersignTaskDialog
+        countersignTaskDialog,
+        flowProperty
     },
     data() {
         return {

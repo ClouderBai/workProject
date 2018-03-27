@@ -14,7 +14,7 @@
 	</div>
 </template>
 <script>
-	import _ from 'underscore'
+	import _ from 'lodash'
 	import draggableMenu from './components/menu'
 	import editContent from './components/content'
 	import attributes from './components/attributes'

@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import tree from '@/components/Tree/orgTreeCustom'
+import tree from '@/components/Tree/OrgTreeCustom'
 import Options from '@/components/Tree/Options'
 
 import roleUserTable from '@/components/Table/User/roleUser' // 角色用户表格

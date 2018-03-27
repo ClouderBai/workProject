@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 13:28:14 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-22 14:40:43
+ * @Last Modified time: 2018-03-27 14:01:22
  */
  
 /**
@@ -35,7 +35,7 @@
 
 <script>
 import type from '../DialogOptions'
-import tree from '@/components/Tree/orgTreeCustom' // 角色树组件
+import tree from '@/components/Tree/OrgTreeCustom' // 角色树组件
 import roleView from '@/components/Table/Role/userRoleView.vue' // 显示角色表格
 import { fetchRoleList } from '@/api/userAccess' // 请求方法
 export default {
@@ -93,7 +93,7 @@ export default {
                 this.tableData = res.entities
             } catch (error) {
                 console.warn(`获取角色列表Error:${JSON.stringify(error)}`)
-                this.$message.error('获取列表失败')
+                this.$message.error(`获取列表失败: ${error.message}`)
             }
         },
         onSelectedChange(selected) {

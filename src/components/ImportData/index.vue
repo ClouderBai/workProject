@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-16 11:43:31 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-21 10:04:09
+ * @Last Modified time: 2018-03-27 11:30:16
  */
  
 /**
@@ -22,7 +22,7 @@
             :show-file-list="false"
             :http-request="handleHttpRequest"
             auto-upload>
-            <el-button size="small" type="primary" id="importBtn" >导入</el-button>
+            <el-button size="small" type="primary" id="importBtn" >{{btnName}}</el-button>
         </el-upload>
     </div>
 </template>
@@ -40,6 +40,11 @@ export default {
         validatorApi: {
             type: Function,
             default: () => false
+        },
+        // 按钮名称
+        btnName: {
+            type: String,
+            default: '导入'
         }
     },
     data() {
@@ -59,7 +64,7 @@ export default {
                 this.$message.success('导入成功! ')
                 this.$emit('refresh', res) // 暴露刷新方法
             } catch (e) {
-                this.$message.error('导入失败! ')
+                this.$message.error(`导入失败: ${e.message}`)
                 console.warn(`上传导入文件: ${JSON.stringify(e)}`)
             }
         },

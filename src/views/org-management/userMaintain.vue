@@ -1,8 +1,8 @@
 /*
  * @Author: LiuJunTing
  * @Date: 2018-01-19 13:27:39
- * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 13:37:19
+ * @Last Modified by: BAICHONG
+ * @Last Modified time: 2018-03-27 13:36:18
  */
 
  /**
@@ -45,7 +45,7 @@
                             </div>
                         </el-row>
                         <el-row class="treeRow">
-                            <org-tree height="420" @changeTree="handleNodeClick" ref="tree"></org-tree>
+                            <org-tree height="420" @changeTree="handleNodeClick" filter='' ref="tree"></org-tree>
                         </el-row>
                     </el-card>
                 </div>
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import orgTree from '@/components/Tree/orgTree' // 树
+import orgTree from '@/components/Tree/OrgTreeCustom' // 树
 import userDetail from './user-maintain/userDetail' // 用户详情
 import userTable from '@/components/Table/User/orgUser' // 用户列表
 import { resetPassword } from '@/api/org' // 请求方法
@@ -235,8 +235,8 @@ export default {
         },
         reset() {
             this.$refs.resetDialog.open(
-                '请输入以下值确认重置该组织下所有人员密码',
-                'RESET'
+                `请输入'确认'重置该组织下所有人员密码`,
+                '确认'
             )
             this.$refs.resetDialog.onClosed = async args => {
                 if (args.option === DialogOptions.CONFIRM) {

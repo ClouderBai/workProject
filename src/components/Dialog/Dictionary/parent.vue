@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 17:07:57 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-22 14:59:03
+ * @Last Modified time: 2018-03-27 13:37:50
  */
 
 /**
@@ -17,7 +17,7 @@
                 <el-dialog :visible="visible" @close="close">
                     <span slot="title"><i :class="`el-icon-${iconType}`"></i>{{operationTitle}}</span>
                     <!-- dialog-body-start -->
-                    <el-form :model="dictionaryForm" :rules="rules" ref="dictionaryForm" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="dictionaryForm" :rules="rules" ref="dictionaryForm" label-width="100px" :validate-on-rule-change="false">
                         <el-form-item label="编码：" prop="code">
                             <el-input v-model="dictionaryForm.code" placeholder="请输入编码"></el-input>
                         </el-form-item>
@@ -105,6 +105,7 @@ export default {
         close(option = DialogOptions.CLOSE) {
             if (!this.visible) return
             this.visible = false
+            this.$refs['dictionaryForm'].clearValidate()
             const payload = {
                 option,
                 sender: this
@@ -144,7 +145,7 @@ export default {
                 this.$message.success('添加成功')
                 this.close(DialogOptions.CONFIRM)
             } catch (e) {
-                this.$message.error('添加失败')
+                this.$message.error(`添加失败: ${e.message}`)
                 console.warn(`添加code: ${JSON.stringify(e)}`)
             }
         },
@@ -155,7 +156,7 @@ export default {
                 this.$message.success('修改成功')
                 this.close(DialogOptions.CONFIRM)
             } catch (e) {
-                this.$message.error('修改失败')
+                this.$message.error(`修改失败: ${e.message}`)
                 console.warn(`修改code: ${JSON.stringify(e)}`)
             }
         },

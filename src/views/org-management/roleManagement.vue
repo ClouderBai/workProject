@@ -1,8 +1,8 @@
 /*
  * @Author: LiuJunTing 
  * @Date: 2018-03-06 15:19:45 
- * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-13 16:57:45
+ * @Last Modified by: BAICHONG
+ * @Last Modified time: 2018-03-27 13:36:12
  */
 
  /**
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import tree from '@/components/Tree/orgTreeCustom'
+import tree from '@/components/Tree/OrgTreeCustom'
 import backup from '@/components/Backup' // 导入导出
 import roleTable from '@/components/Table/Role/index' // 角色表格
 import roleBase from '@/components/Dialog/Role/base' // 角色弹窗  新建/修改

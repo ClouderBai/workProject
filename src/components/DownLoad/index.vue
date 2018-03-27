@@ -2,7 +2,7 @@
  * @Author: BAICHONG 
  * @Date: 2018-03-15 09:07:11 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-16 11:20:35
+ * @Last Modified time: 2018-03-27 11:04:41
  */
 <script>
 /**
@@ -53,17 +53,22 @@ export default {
         iconType: {
             type: String,
             default: ''
+        },
+        // 按钮名称
+        btnName: {
+            type: String,
+            default: '导出'
         }
     },
     render(h) {
         // rel='external nofollow' href='javascript:;'
-        return (<el-button icon={this.iconType} class={this.btnClass} type={this.type} size={this.size} on-click={ () => this.handleBatchDownload() } >导出</el-button >)
+        return (<el-button icon={this.iconType} class={this.btnClass} type={this.type} size={this.size} on-click={ () => this.handleBatchDownload() } >{this.btnName}</el-button >)
     },
     methods: {
         handleBatchDownload() {
             // 需要下载打包的路径, 可以是本地相对路径, 也可以是跨域的全路径
             // const data = 'http://bim001.320.io/bimsapi/rest/standardMenu/jsonExportStandardMenuTree'
-            console.log('%c%s', 'color:red;font-size:20px', 'this.propMethod  : ', this.propMethod)
+            // console.log('%c%s', 'color:red;font-size:20px', 'this.propMethod  : ', this.propMethod)
             const data = this.propMethod
             getFile(data)
                 .then(res => {

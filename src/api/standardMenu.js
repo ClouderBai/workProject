@@ -97,3 +97,11 @@ export function checkJsonImportEstimateRelation() {
     })
 }
 
+// 导入标准菜单树的时候判断旧数据是否有关联(true有关联/false没有关联)
+export function updateStandardMenuTreeDrag(standardMenus) {
+    return request({
+        url: 'standardMenu/standardMenuTreeDrag',
+        method: 'POST',
+        data: { standardMenus }
+    })
+}

@@ -2,7 +2,7 @@
  * @Author: LiuJunTing
  * @Date: 2018-03-19 15:52:01
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-23 10:32:40
+ * @Last Modified time: 2018-03-26 13:49:16
  */
 
 /**
@@ -14,6 +14,8 @@
 */
 
 import ValidatableObject from '../base/ValidatableObject'
+import { validatorImpl } from '../base/DecoratorUtil'
+import { Validator } from '../base/Validators'
 import { required, accessor, type } from '../base/Decorators'
 
 import CustomerForm from './CustomerForm'
@@ -22,17 +24,38 @@ import TaskManager from './TaskManager'
 import CustomData from './CustomData'
 import Due from './Due'
 import Fallback from './Fallback'
+import store from '@/store'
 
 // import Diagram from './Diagram'
 // import Sequence from './Sequence'
+
+class UniquenessValidator extends Validator {
+    /* eslint-disable */
+    constructor(errorMessage, prop) {
+        super(errorMessage)
+        this.prop = prop
+    }
+    /* eslint-enable */
+
+    validate(value) {
+        const nodes = store.getters.getAllNodes
+        return !(nodes.some(v => v[this.prop] === value))
+    }
+}
+// 俩参数 1.错误提示信息  2.要校验的key
+function uniqueness(errorMessage, prop) {
+    return validatorImpl(new UniquenessValidator(errorMessage, prop))
+}
 
 class HumanTask extends ValidatableObject {
     @accessor()
     _uuid = '' // node节点唯一标识
 
+    @uniqueness(`节点名称已存在`, `name`)
     @required(false, '节点名称不能为空')
     _name = '' // 节点名称
 
+    @uniqueness(`显示名称已存在`, `label`)
     @required(false, '显示名称不能为空')
     _label = '' // 显示名称
 

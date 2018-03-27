@@ -2,7 +2,7 @@
  * @Author: BAICHONG 
  * @Date: 2018-03-12 11:22:37 
  * @Last Modified by: BAICHONG
- * @Last Modified time: 2018-03-16 09:39:30
+ * @Last Modified time: 2018-03-27 09:56:33
  */
  /**
 |--------------------------------------------------
@@ -31,6 +31,7 @@
             ref="tree" 
             :filter-node-method="filterNode"
             highlight-current 
+            :expand-on-click-node="false"
             :props="defaultProps">
         </el-tree>
         <!-- <el-button @click="test">test</el-button> -->
@@ -172,40 +173,6 @@ export default {
             }
             this.$refs.tree.remove(id)
         }
-        // // 更新子节点
-        // async updateChild(id = this.getCurrentKey(), data) {
-        //     if (!data) {
-        //         try {
-        //             data = await this.loadData(id)
-        //         } catch (error) {
-        //             console.warn('更新节点' + error)
-        //         }
-        //     }
-        //     this.$refs.tree.updateKeyChildren(id, data)
-        // },
-
-        // // 获取当前点击节点
-        // getCurrentKey() {
-        //     return this.$refs.tree.getCurrentKey()
-        // },
-
-        // // 更新父节点
-        // async updateParent(updateId) {
-        //     try {
-        //         const currentKey = this.getCurrentKey()
-        //         const parentId = this.$refs.tree.getCurrentNode()
-        //         const id = updateId || parentId && parentId.parentId || this.defaultId
-        //         if (id === this.defaultId) {
-        //             await this.loadData().catch(e => console.warn('刷新根节点' + e))
-        //             return
-        //         }
-        //         const data = await this.loadData(id)
-        //         this.updateChild(id, data)
-        //         this.defaultExpanded = [currentKey]
-        //     } catch (error) {
-        //         console.warn(`更新父节点出错${error}`)
-        //     }
-        // },
     }
 }
 </script>

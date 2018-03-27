@@ -7,6 +7,7 @@ export async function fetchSystemParams() {
         url: 'system/showParams',
         method: 'GET'
     })
+
     // 把数组中settingVal的字符串true\false转为布尔值
     const data = JSON.stringify(systemParams).replace(/("true")/g, true).replace(/("false")/g, false)
     return new SystemParams().init(JSON.parse(data))
@@ -19,7 +20,11 @@ export function updateSystemParams(srcData) {
 
     // 过滤出所有settingVal值为ture的数据  并把值变为'Y'
     function filterParams(list) {
-        return list.filter(v => v.settingVal === true).filter(v => { v.settingVal = 'Y' })
+        const data = list.filter(v => v.settingVal === true)
+        data.forEach(v => {
+            v.settingVal = 'Y'
+        })
+        return data
     }
 
     for (const key in data) {

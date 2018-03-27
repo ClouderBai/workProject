@@ -1,8 +1,8 @@
 /*
  * @Author: LiuJunTing 
  * @Date: 2018-03-07 09:23:32 
- * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-07 11:01:55
+ * @Last Modified by: BAICHONG
+ * @Last Modified time: 2018-03-27 13:35:44
  */
 
  /* 用法懒得再写一遍了  参考选择人组件  components/Dialog/User/addUser.vue /*
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import tree from '@/components/Tree/orgTreeCustom'
+import tree from '@/components/Tree/OrgTreeCustom'
 import DialogOptions from '../DialogOptions'
 
 export default {

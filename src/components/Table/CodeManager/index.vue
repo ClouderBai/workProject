@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 17:14:54 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 17:15:24
+ * @Last Modified time: 2018-03-27 13:34:38
  */
 
 /**
@@ -125,14 +125,10 @@ export default {
 
                 try {
                     await deleteCodes(ids)
-                    /* this.selected.forEach(v => {
-                        this.data.splice(v.index, 1)
-                        this.total -= 1
-                    }) */
                     this.getTableData()
                     this.$message.success('删除成功！')
                 } catch (e) {
-                    this.$message.error('删除失败!')
+                    this.$message.error(`删除失败: ${e.message}`)
                     console.warn(`删除编码：${e}`)
                 }
             } catch (e) {
@@ -145,6 +141,14 @@ export default {
             this.total += 1
             if (this.data.length >= this.pageSize) return
             this.data.push(data)
+        },
+        // 刷新表格
+        refresh(data) {
+            if (data) {
+                this.data = data
+                return
+            }
+            this.getTableData()
         }
     }
 }

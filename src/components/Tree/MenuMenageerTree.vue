@@ -2,7 +2,7 @@
  * @Author: BAICHONG 
  * @Date: 2018-03-16 09:05:06 
  * @Last Modified by: BAICHONG
- * @Last Modified time: 2018-03-22 18:00:36
+ * @Last Modified time: 2018-03-27 14:47:54
  */
 /**
 |--------------------------------------------------
@@ -32,6 +32,7 @@
             default-expand-all
             :render-content="renderContent"
             ref="tree"
+            :expand-on-click-node="false"
             :default-checked-keys="checkedKeys"
             @check="checkChange"
             highlight-current 
@@ -42,7 +43,7 @@
     </div>
 </template>
 <script>
-import _ from 'underscore'
+import _ from 'lodash'
 import { fetchOrgMenuListTreeByOrgId, updateOrgMenu } from '@/api/standardMenu'
 export default {
     props: {

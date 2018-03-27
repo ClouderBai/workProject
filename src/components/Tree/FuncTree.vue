@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-09 18:00:37 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 13:29:09
+ * @Last Modified time: 2018-03-27 13:51:46
  */
  /**
 |--------------------------------------------------
@@ -24,7 +24,6 @@
         <!-- search-end -->
         <el-tree 
             :data="data"
-            :default-expanded-keys="defaultExpanded" 
             @current-change="treeChange" 
             node-key="id"
             :render-content="renderContent"
@@ -36,6 +35,7 @@
     </div>
 </template>
 <script>
+import StyleOption from './TreeStyleOptions'
 import { fetchAllFuncCategoryList } from '@/api/funcModule'
 export default {
     props: {
@@ -54,7 +54,6 @@ export default {
                 this.$refs.tree.filter(val)
             },
             deep: true
-
         }
     },
     data() {
@@ -66,30 +65,9 @@ export default {
                 children: 'children',
                 isLeaf: data => !data.hasChild
             },
-            treeId: undefined,
-            defaultExpanded: [], // 默认展开的数组集合
-            // ========== 搜索树相关 ==============
-            defaultPropsSearch: {
-                label: 'fullName',
-                children: 'hasChild'
-            },
-            searchedSelected: {},
             loading: false,
-            oldVal: '',
-            // ===============render============
-            funType: { // 图标选择
-                'FunctionCategory': 'bimicon-home_light', // 模块
-                'Function': 'bimicon-file' // 功能
-            },
-            funcTypeDefault: 'bimicon-attentionforbid', // 无配置选项,默认值
-            colorOpt: {
-                'FunctionCategory': 'red' // 模块图标颜色
-            },
             searchForm: {
                 key: ''
-            },
-            textColor: {
-                'disabled': '#aaa' // 颜色disabled灰度
             }
         }
     },
@@ -116,22 +94,6 @@ export default {
                 .catch(e => void console.warn(`获取树数据: ${e}`))
                 .finally(() => (this.loading = false))
         },
-
-        // 更新子节点
-        async updateChild(id = this.getCurrentKey(), data) {
-            if (!data) {
-                try {
-                    data = await this.loadData(id)
-                } catch (error) {
-                    console.warn('更新节点' + error)
-                }
-            }
-            this.$refs.tree.updateKeyChildren(id, data)
-        },
-        // 获取当前点击节点
-        getCurrentKey() {
-            return this.$refs.tree.getCurrentKey()
-        },
         // 当前节点改变时
         treeChange(val) {
             this.selected = val
@@ -146,14 +108,12 @@ export default {
         },
         // 自定义树节点
         renderContent(h, { node, data, store }) {
-            const levelType = this.funType[data.moduleType] ? this.funType[data.moduleType] : this.funcTypeDefault
-            const color = this.colorOpt[data.levelType]
-            const textColor = this.chooseFunction && data.moduleType !== 'Function' ? this.textColor['disabled'] : ''
+            const levelType = StyleOption.funType[data.moduleType] ? StyleOption.funType[data.moduleType] : StyleOption.iconDefault
             return h(
                 'span',
                 [
-                    h('i', { style: { color }, class: levelType + ' icon-color' }, [' ']),
-                    h('span', { style: { color: textColor }}, node.label)
+                    h('i', { class: levelType }, [' ']),
+                    h('span', {}, node.label)
                 ]
             )
         },
@@ -164,7 +124,7 @@ export default {
         },
         // 在指定id后插入节点
         insertAfter(data, id) {
-            this.$refs.tree.insertAfter(data, id)
+            this.data.push(data)
         },
         // 在指定id下创建子节点
         append(data, parentId) {

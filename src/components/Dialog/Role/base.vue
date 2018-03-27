@@ -22,8 +22,8 @@
  
 <template>
     <div>
-        <el-dialog :title="title" :visible="visible" @close="close()" width="550px" append-to-body>
-            <el-form :model="submitData" :rules="rules" ref="form" label-width="130px" class="roleName">
+        <el-dialog :title="title" :visible="visible" @close="close()" width="550px" append-to-body v-if="visible">
+            <el-form :model="submitData" :rules="rules" ref="form" label-width="130px" class="roleName" :validate-on-rule-change="false">
                 <el-form-item label="编码" prop="code">
                     <el-input v-model="submitData.code"></el-input>
                 </el-form-item>

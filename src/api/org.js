@@ -119,12 +119,13 @@ export function deleteLevelData(data) {
 }
 
 // 校验级别类别code是否重复
-export function checkLevelCode(code) {
+export function checkLevelCode(code, levelId) {
     return request({
         url: 'org/valid/LevelCode',
         method: 'GET',
         params: {
-            code: code
+            code,
+            levelId
         }
     })
 }
@@ -238,12 +239,13 @@ export function updateBizType(data) {
 }
 
 // 查询业务类别code
-export function searchBizTypeCode(code) {
+export function searchBizTypeCode(code, bizId) {
     return request({
         url: 'org/valid/BizTypeCode',
         method: 'GET',
         params: {
-            code
+            code,
+            bizId
         }
     })
 }
@@ -310,12 +312,13 @@ export function fetchPositionMenuFromCache() {
 }
 
 // 查询岗位类别code
-export function searchPositionCode(code) {
+export function searchPositionCode(code, positionId) {
     return request({
         url: 'org/valid/positionCode',
         method: 'GET',
         params: {
-            code
+            code,
+            positionId
         }
     })
 }

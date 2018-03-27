@@ -1,8 +1,8 @@
 /*
  * @Author: BaiChong 
  * @Date: 2018-01-21 15:41:37 
- * @Last Modified by: BAICHONG
- * @Last Modified time: 2018-03-06 16:39:21
+ * @Last Modified by: zhanglianhao
+ * @Last Modified time: 2018-03-27 16:35:01
  */
 <template>
     <div>
@@ -20,22 +20,10 @@
                                         icon="bimicon-delete"
                                         class="custom-medium-btn red-btn"
                                         @click="removeTreeNode" 
-                                        :disabled="!treeData"                                          
+                                        :disabled="!treeData"
                                         size="medium">
                                         删除
                                     </el-button>
-                                    <!-- 上移 -->
-                                    <!-- <el-button 
-                                        :disabled="!treeData" 
-                                        type="primary" 
-                                        size="small">上移
-                                    </el-button> -->
-                                    <!-- 下移 -->
-                                    <!-- <el-button 
-                                        :disabled="!treeData" 
-                                        type="primary" 
-                                        size="small">下移
-                                    </el-button> -->
                                     <!-- 修改 -->
                                     <el-button
                                         icon="bimicon-edit"
@@ -74,22 +62,22 @@
                                     </el-dropdown>
                                 </el-button-group>
                                 <!-- 搜索功能 -->
-                                <el-form ref="form" :model="searchFormData" @submit.native.prevent class=" float-left  mb20" style="margin-top:20px;">
+                                <!-- <el-form ref="form" :model="searchFormData" @submit.native.prevent class=" float-left  mb20" style="margin-top:20px;">
                                     <el-input class="el-input-primary" placeholder="请输入搜索内容" v-model="searchFormData.orgSearchValue" @keyup.enter.native.prevent="seachTree">
                                         <el-button clearable slot="append" icon="el-icon-search" class="searchbtn" @click="seachTree">
                                         </el-button>
                                     </el-input>
-                                </el-form>
+                                </el-form> -->
                             </el-col>
                         </el-row>
                         <!-- 树 -->
-                        <org-tree @changeTree="changeTree" ref="tree" height="230" />
+                        <OrgTree @changeTree="changeTree" filter='' ref="tree" height="800" />
                     </el-card>
                     <!-- 树结束 -->
 
                     <!-- 基本信息开始:extData="extData" -->
                     <el-card class="leftBot">
-                        <companyDetail :orgInfo="orgInfo"></companyDetail>
+                        <companyDetail :orgInfo="orgInfo"/>
                     </el-card>
                     <!-- 基本信息结束 -->
                 </div>
@@ -159,15 +147,15 @@ import { deleteOrgNode, fetchAllOrgInfo } from '../../api/org'
 // 组件
 import userTable from '@/components/Table/User/orgUser' // 用户列表
 import companyDetail from './org-maintain/companyDetail'
-import orgTree from '@/components/Tree/orgTree'
+import OrgTree from '@/components/Tree/OrgTreeCustom'
 // 弹窗
 import diaCreateDep from '@/components/Dialog/Department/diaCreateDep'
-import createBatchJob from '@/components/Dialog/OrgJob/batch.vue'
-import createJob from '@/components/Dialog/OrgJob/create.vue'
-import jobCategory from '@/components/Dialog/JobCategoryClass/manage.vue'
-import typeofBusiness from '@/components/Dialog/BussinessClass/manage.vue'
-import levelClassManage from '@/components/Dialog/LevelClass/manage.vue'
-import orgPropManage from '@/components/Dialog/DepExtAddCol/manage.vue'
+import createBatchJob from '@/components/Dialog/OrgJob/batch'
+import createJob from '@/components/Dialog/OrgJob/create'
+import jobCategory from '@/components/Dialog/JobCategoryClass/manage'
+import typeofBusiness from '@/components/Dialog/BussinessClass/manage'
+import levelClassManage from '@/components/Dialog/LevelClass/manage'
+import orgPropManage from '@/components/Dialog/DepExtAddCol/manage'
 import depUpdate from '../../components/Dialog/DepUpdate'
 
 // 配置
@@ -178,7 +166,7 @@ export default {
     components: {
         userTable,
         companyDetail,
-        orgTree,
+        OrgTree,
         jobCategory,
         typeofBusiness,
         diaCreateDep,
@@ -225,19 +213,18 @@ export default {
 
         // 点击树返回的数据
         changeTree(val) {
-            console.log('%c%s', 'color:red', 'val  : ', JSON.stringify(val))
             this.treeData = val
             this.getTableData(val.id) // table数据
             this.getOrgInfo(val.id) // 组织基本信息
         },
 
-        // 搜索树
-        seachTree() {
-            this.$refs.tree.search(this.searchFormData.orgSearchValue)
-            this.$refs.userTable.clear()
-            this.orgInfo = {}
-            this.treeData = null
-        },
+        // // 搜索树
+        // seachTree() {
+        //     this.$refs.tree.search(this.searchFormData.orgSearchValue)
+        //     this.$refs.userTable.clear()
+        //     this.orgInfo = {}
+        //     this.treeData = null
+        // },
 
         // 创建部门
         openDiaCreateDep(val) {
@@ -339,7 +326,6 @@ export default {
 
         // 设置按钮显示
         openSetting(val) {
-            console.log(val)
             this.$refs[val].open()
         },
 
@@ -372,7 +358,7 @@ export default {
 
 <style scoped lang="scss">
 .leftTop {
-    height: 410px;
+    height: 810px;
 }
 .leftBot {
     height: 400px;

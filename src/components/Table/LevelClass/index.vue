@@ -6,6 +6,7 @@
                         :data="classData"
                         style="width: 100%;cursor:pointer;"                   
                         border
+                        :height="height"
                         highlight-current-row
                         @row-click="choseRow"
                         @selection-change="handleSelectionChange">
@@ -34,9 +35,16 @@
 import { fetchLevelInfo, searchLevelInfo, deleteLevelData } from '@/api/org'
 
 export default {
-    props: [
-        'type' // 表格类型
-    ],
+    props: {
+        type: {
+            type: String,
+            deafule: ''
+        },
+        height: {
+            type: Number,
+            default: 400
+        }
+    },
     data() {
         return {
             classData: [], // 页面表格数据

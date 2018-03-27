@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <el-card>
-                    <Tree @treeChange='orgTreeChange' :filter='type' height='620'/>
+                    <Tree @changeTree='orgTreeChange' :filter='type' height='620'/>
                 </el-card>
             </el-col>
 
@@ -12,7 +12,7 @@
                     <el-col :span="24">
                         <el-card style="height: 68px" class="content">
                             <el-button-group>
-                                <el-button @click="annul" type="primary" size="mini">撤销</el-button>
+                                <el-button @click="cancel" type="primary" size="mini">撤销</el-button>
                                 <el-button @click="saveTreeStatus" type="primary" size="mini">保存</el-button>
                             </el-button-group>
                         </el-card>
@@ -32,7 +32,7 @@
 
 <script>
 // 组件
-import Tree from '../../components/Tree/OrgTreeCust'
+import Tree from '../../components/Tree/OrgTreeCustom'
 import MenuTree from '../../components/Tree/MenuMenageerTree'
 // 配置
 import Options from '../../components/Tree/Options'
@@ -52,7 +52,7 @@ export default {
     methods: {
         // 组织树点击事件
         orgTreeChange(val) {
-            // console.log('%c%s', 'color:red', '左侧  : ', JSON.stringify(val.id))
+            console.log('%c%s', 'color:red', '左侧  : ', JSON.stringify(val.id))
             this.$refs.menuTree.loadData(val.id)
         },
 
@@ -67,7 +67,7 @@ export default {
         },
 
         // 撤销
-        annul() {
+        cancel() {
             this.$refs.menuTree.loadData()
         }
     }

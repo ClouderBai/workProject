@@ -2,7 +2,7 @@
  * @Author: LiuJunTing 
  * @Date: 2018-03-14 13:41:38 
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-23 16:33:59
+ * @Last Modified time: 2018-03-26 18:18:27
  */
 
 /**
@@ -19,12 +19,12 @@
 
 <template>
     <div>
-        <el-dialog :title="title" :visible="visible" @close="close">
+        <el-dialog :title="title" :visible="visible" @close="close" v-if="visible">
             <!-- form-start -->
-            <el-form :model="humanTaskForm" :rules="rules" ref="humanTaskForm" label-width="130px">
-                <el-tabs v-model="activeName" type="card">
+            <el-form :model="humanTaskForm" :rules="rules" ref="humanTaskForm" label-width="130px" :validate-on-rule-change="false">
+                <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
                     <!-- 基本设置-start -->
-                    <el-tab-pane label="基本设置" name="first" class="paneStyle">
+                    <el-tab-pane label="基本设置" name="first">
                         <el-form-item label="节点名称：" prop="name">
                             <el-input v-model="humanTaskForm.name"></el-input>
                         </el-form-item>
@@ -38,7 +38,7 @@
                     <!-- 基本设置-end -->
 
                     <!-- 表单设置-start -->
-                    <el-tab-pane label="表单设置" name="second" class="paneStyle">
+                    <el-tab-pane label="表单设置" name="second">
                         <!-- 按钮部分 -->
                         <el-row>
                             <div>
@@ -58,7 +58,7 @@
                     <!-- 表单设置-end -->
 
                     <!-- 处理设置-start -->
-                    <el-tab-pane label="处理设置" name="third" class="paneStyle">
+                    <el-tab-pane label="处理设置" name="third">
                         <el-card>
                             <!-- 按钮部分 -->
                             <el-row>
@@ -90,7 +90,7 @@
                     <!-- 处理设置-end -->
 
                     <!-- 高级设置-start -->
-                    <el-tab-pane label="高级设置" name="fourth" class="paneStyle">
+                    <el-tab-pane label="高级设置" name="fourth">
                         <el-form-item label="是否跳过:">
                             <el-radio-group v-model="humanTaskForm1.expertOption.skip">
                                 <el-radio :label="false">不跳过</el-radio>
@@ -109,7 +109,7 @@
             </el-form>
             <!-- form-end -->
             <div slot="footer" class="dialog-footer">
-                <el-button class="ljt-btn tiffany-btn" @click="cancel">取 消</el-button>
+                <el-button class="ljt-btn tiffany-btn" @click="close">取 消</el-button>
                 <el-button class="ljt-btn primary-btn" @click="confirm">确 定</el-button>
             </div>
         </el-dialog>
@@ -178,6 +178,17 @@ export default {
         }
     },
     methods: {
+        // tab切换点击事件  如果基本信息校验不通过  不允许切换到别的页面
+        async tabClick() {
+            try {
+                await this.$refs['humanTaskForm'].validate()
+            } catch (e) {
+                this.$nextTick(() => {
+                    this.activeName = 'first'
+                })
+            }
+        },
+
         // 新表单  打开选择表填单弹窗
         newForm() {
             this.$refs.chooseFormDig.open()
@@ -187,7 +198,7 @@ export default {
                         const data = args.data
                         let res = await fetchFormInfo({ id: data.id })
                         if (!res.element) return this.$message.warning(`请选择一个有元素的表单`)
-                        if (this.humanTaskForm.customerFormDefines.some(v => res.id === v.formId)) return this.$message.warning(`该表单已在表单列表中`)
+                        if (this.humanTaskForm.customerFormDefines.some(v => res.id === v.formId && v.formType === 'New')) return this.$message.warning(`该表单已在表单列表中`)
                         // 此处拿到的res.element数据结构是这个鸟样子的  "[{/xxx/:xxx},{/xxx/:xxx}]"
                         res = `{"foo":${res.element}}`
                         const formElements = JSON.parse(res).foo.map(v =>
@@ -209,8 +220,6 @@ export default {
                         // 更新数据集
                         this.humanTaskForm.customerFormDefines.push(new CustomerForm().init(customData))
                         this.$refs.chooseFormDig.close(DialogOptions.CALLBACK)
-                        // 更新表单列表数据
-                        this.$refs.formTable.refreshList(this.humanTaskForm.customerFormDefines)
                     } catch (error) {
                         console.warn(`获取表单信息失败${JSON.stringify(error)}`)
                         this.$message.error('获取表单信息失败')
@@ -222,6 +231,15 @@ export default {
         // 关联表单  打开选择关联表单弹窗
         correlationForm() {
             this.$refs.chooseCorrelationFormDig.open({ uuid: this.uuid })
+            this.$refs.chooseCorrelationFormDig.onClosed = async args => {
+                if (args.option === DialogOptions.CONFIRM) {
+                    const data = args.data
+                    // 判断表单是否在表单列表已存在  条件 id存在、所属节点存在、表单类型为关联
+                    if (this.humanTaskForm.customerFormDefines.some(v => data.formId === v.formId && data.belongedToNodeDisplayName === v.belongedToNodeDisplayName && v.formType === 'Associated')) return this.$message.warning(`该表单已在表单列表中`)
+                    this.humanTaskForm.customerFormDefines.push(new CustomerForm().init(data))
+                    this.$refs.chooseCorrelationFormDig.close(DialogOptions.CALLBACK)
+                }
+            }
         },
 
         // 删除表单设置的表单
@@ -267,17 +285,10 @@ export default {
 
         async confirm() {
             try {
-                const valid = await this.$refs['humanTaskForm'].validate()
-                if (valid) {
-                    this.$store.commit('setNodeInfo', this.humanTaskForm)
-                }
-            } catch (e) {
-                return false
-            }
-        },
-
-        cancel() {
-            this.visible = false
+                await this.$refs['humanTaskForm'].validate()
+                this.$store.commit('setNodeInfo', this.humanTaskForm)
+                this.close()
+            } catch (e) {} // eslint-disable-line
         },
 
         close() {
@@ -286,9 +297,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-    /* .paneStyle {
-        height: 500px;
-        overflow-y: auto
-    } */
-</style>

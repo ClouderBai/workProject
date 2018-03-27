@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 14:14:22 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 15:29:14
+ * @Last Modified time: 2018-03-27 13:38:15
  */
 
 /**
@@ -79,7 +79,7 @@ export default {
                 this.$message.success('恢复成功')
                 this.close(DialogOptions.CONFIRM)
             } catch (e) {
-                this.$message.error('恢复失败')
+                this.$message.error(`恢复失败: ${e.message}`)
                 console.warn(`恢复数据: ${JSON.stringigy(e)}`)
             }
         }

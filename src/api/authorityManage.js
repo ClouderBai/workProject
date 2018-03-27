@@ -20,7 +20,7 @@ export function updateAuthorityManage(roleActionList) {
     return request({
         url: 'authorityManage/updateAuthorityManage',
         method: 'POST',
-        data: { roleActionList }
+        data: roleActionList
     })
 }
 

@@ -2,7 +2,7 @@
  * @Author: LiuJunTing 
  * @Date: 2018-03-21 10:28:50 
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-23 13:59:14
+ * @Last Modified time: 2018-03-26 11:50:19
  */
 
 /**
@@ -66,7 +66,7 @@
 
                 <!-- 表格模块开始 -->
                 <el-col :span="24" class="margin-bottom-20">
-                    <form-table height="440" ref="formTable" @row-click="onFormClick"></form-table>
+                    <form-table v-if="visible" height="440" ref="formTable" @row-click="onFormClick"></form-table>
                 </el-col>
                 <!-- 表格模块结束 -->
             </el-row>

@@ -2,7 +2,7 @@
  * @Author: BAICHONG 
  * @Date: 2018-03-09 18:02:30 
  * @Last Modified by: BAICHONG
- * @Last Modified time: 2018-03-22 13:25:25
+ * @Last Modified time: 2018-03-26 16:28:42
  */
  /**
 |--------------------------------------------------
@@ -30,6 +30,7 @@
                 <!-- 菜单树结构 -->
                 <el-card>
                     <Tree ref="tree" height='550' @treeChange='treeChange'/>
+                    <StandardMenuTreeExample/>
                 </el-card>
             </el-col>
             <el-col :span="16" class="orange">
@@ -108,6 +109,7 @@
 <script>
 // 组件
 import Tree from '@/components/Tree/StandardMenuTree'
+import StandardMenuTreeExample from '@/components/Tree/StandardMenuTreeExample'
 import StandardMenu from '@/model/StandardMenu'
 import CustomParamSet from '../../components/Dialog/CustomParamSet'
 import CustomIcon from '../../components/Dialog/CustomIcon'
@@ -125,8 +127,8 @@ export default {
         CustomIcon,
         ChooseFunction,
         DownLoad,
-        backup
-
+        backup,
+        StandardMenuTreeExample
     },
     data() {
         return {

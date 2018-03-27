@@ -2,7 +2,7 @@
  * @Author: LiuJunTing 
  * @Date: 2018-03-23 09:49:18 
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-23 16:37:22
+ * @Last Modified time: 2018-03-26 11:50:30
  */
 
 /**
@@ -19,7 +19,7 @@
  
 @method close(String,Object) 关闭模态框
 @params (1) option 模态框关闭状态
-        (2) data 要载荷的自定义数据 
+        (2) hold 是否保持模态框显示状态 
 
 @method onClosed(*Object) 模态框点击确认按钮时关闭时回调方法
 @params (1) *option  模态框关闭状态
@@ -34,7 +34,7 @@
             <el-row>
                 <!-- 表格模块开始 -->
                 <el-col :span="24" class="margin-bottom-20">
-                    <correlationFormToChoose :uuid="uuid" ref="formTable" @row-click="formTableClick"></correlationFormToChoose>
+                    <correlationFormToChoose v-if="visible" :uuid="uuid" ref="formTable" @row-click="formTableClick"></correlationFormToChoose>
                 </el-col>
                 <!-- 表格模块结束 -->
             </el-row>
@@ -52,7 +52,7 @@ import correlationFormToChoose from '@/components/Table/FlowDesigner/correlation
 import DialogOptions from '../DialogOptions'
 
 export default {
-    name: 'chooseUser',
+    name: 'chooseCorrelationForm',
     components: {
         correlationFormToChoose
     },
@@ -89,7 +89,7 @@ export default {
         },
 
         confirm() {
-            if (!this.targetData.id) {
+            if (!this.targetData.formId) {
                 this.$message.warning('请选择表单')
                 return
             }
@@ -101,17 +101,6 @@ export default {
 
         cancel() {
             this.close(DialogOptions.CANCEL)
-        },
-
-        // 获取用户列表
-        async getUserList() {
-            // 不加计时器  ref是undefined
-            setTimeout(() => {
-                const params = {
-                    filter: this.searchFormData.userSearchValue
-                }
-                this.$refs.formTable.refreshList(params)
-            }, 0)
         },
 
         // 表单点击事件触发

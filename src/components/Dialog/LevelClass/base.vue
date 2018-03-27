@@ -11,7 +11,8 @@
             :rules="rules"
             ref="ruleForm" 
             label-width="100px" 
-            class="demo-ruleForm">
+            class="demo-ruleForm"
+            :validate-on-rule-change="false">
             <el-form-item label="类别名称" prop="name">
                 <el-input v-model="targetData.name"></el-input>
             </el-form-item>
@@ -140,6 +141,7 @@ export default {
         updateLevelData(ev) {
             this.targetData = ev
             this.targetData.beginEdit()
+            console.log(ev.id)
             this.rules = {
                 name: [
                     {

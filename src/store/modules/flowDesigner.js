@@ -2,7 +2,7 @@
  * @Author: LiuJunTing
  * @Date: 2018-03-14 14:03:09
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-22 10:40:00
+ * @Last Modified time: 2018-03-26 10:30:15
  */
 
 /**
@@ -46,7 +46,9 @@ const flowDesigner = {
         getNodeInfo: (state) => uuid => state.flowDesignerData.data.nodes.find(v => v.uuid === uuid),
 
         // 获取nodes集合
-        getAllNodes: (state) => () => state.flowDesignerData.data.nodes
+        getAllNodes: (state) => {
+            return JSON.parse(JSON.stringify(state.flowDesignerData.data.nodes))
+        }
     }
 }
 

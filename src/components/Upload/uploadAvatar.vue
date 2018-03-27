@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-12 09:29:07 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 17:27:57
+ * @Last Modified time: 2018-03-27 14:03:05
  */
 
 /*
@@ -83,6 +83,7 @@ export default {
                 this.$emit('getUrl', res) // 发出url
                 this.$message.success('上传成功')
             } catch (error) {
+                this.$message.error(`上传失败: ${error.message}`)
                 console.warn(`上传材料：${error}`)
             }
         },

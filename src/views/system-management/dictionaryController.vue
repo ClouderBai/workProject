@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-14 10:57:05 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-22 14:19:49
+ * @Last Modified time: 2018-03-27 13:18:34
  */
 
 /**
@@ -240,7 +240,7 @@ export default {
                     this.loadData()
                     this.$message.success('删除成功')
                 } catch (e) {
-                    this.$message.error('删除失败')
+                    this.$message.error(`删除失败: ${e.message}`)
                     console.warn(`删除字典: ${JSON.stringify(e)}`)
                 }
             } catch (e) {
@@ -272,7 +272,7 @@ export default {
                     this.$message.success('删除成功')
                     this.loadData()
                 } catch (e) {
-                    this.$message.error('删除失败')
+                    this.$message.error(`删除失败: ${e.message}`)
                     console.warn(`删除字典: ${JSON.stringify(e)}`)
                 }
             } catch (e) {

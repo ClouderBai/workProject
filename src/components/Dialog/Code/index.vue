@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 17:13:28 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-20 17:14:06
+ * @Last Modified time: 2018-03-27 18:03:30
  */
 
 /**
@@ -17,7 +17,7 @@
                 <el-dialog :visible="visible" @close="close">
                     <span slot="title"><i :class="`el-icon-${iconType}`"></i>{{operationTitle}}</span>
                     <!-- dialog-body-start -->
-                    <el-form :model="codeForm" :rules="rules" ref="codeForm" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="codeForm" :rules="rules" ref="codeForm" label-width="100px" :validate-on-rule-change="false">
                         <el-form-item label="编码：" prop="code">
                             <el-input v-model="codeForm.code" placeholder="请输入编码"></el-input>
                         </el-form-item>
@@ -82,6 +82,7 @@ export default {
         close(option = DialogOptions.CLOSE, data) {
             if (!this.visible) return
             this.visible = false
+            this.$refs['codeForm'].clearValidate()
             const payload = {
                 option: option,
                 data,
@@ -121,9 +122,9 @@ export default {
                     format: this.codeForm.format,
                     desc: this.codeForm.desc
                 }
-                await addCode(data)
+                const res = await addCode(data)
                 this.$message.success('添加成功')
-                this.close(DialogOptions.CONFIRM, data)
+                this.close(DialogOptions.CONFIRM, res)
             } catch (e) {
                 this.$message.error('添加失败')
                 console.warn(`新增code: ${e}`)

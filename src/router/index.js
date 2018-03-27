@@ -214,6 +214,24 @@ export const constantRouterMap = [
                 name: 'Tree',
                 component: () => import('@/views/tree/index'),
                 meta: { title: 'Tree', icon: 'bigTree' }
+            },
+            {
+                path: 'dragableTree',
+                name: 'dragableTree',
+                component: () => import('@/views/tree/twocolum/index'),
+                meta: { title: 'dragableTree', icon: 'bigTree' }
+            },
+            {
+                path: 'treeExample',
+                name: 'treeExample',
+                component: () => import('@/views/tree/dragableTree'),
+                meta: { title: 'treeExample', icon: 'bigTree' }
+            },
+            {
+                path: 'fetchAllStandardMenuList',
+                name: 'fetchAllStandardMenuList',
+                component: () => import('@/views/tree/vue-dragable-tree'),
+                meta: { title: 'fetchAllStandardMenuList', icon: 'bigTree' }
             }
         ]
     },

@@ -1,8 +1,8 @@
 /*
  * @Author: LiuJunTing 
  * @Date: 2018-02-01 14:34:59 
- * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-12 16:43:03
+ * @Last Modified by: BAICHONG
+ * @Last Modified time: 2018-03-27 13:35:57
  */
 
 /**
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import orgTree from '@/components/Tree/orgTree' // 树
+import orgTree from '@/components/Tree/OrgTreeCustom' // 树
 import userTable from '@/components/Table/User/orgUserToChoose' // 表
 import DialogOptions from '../DialogOptions'
 

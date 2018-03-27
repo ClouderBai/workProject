@@ -2,7 +2,7 @@
  * @Author: LiuJunTing 
  * @Date: 2018-03-15 09:37:00 
  * @Last Modified by: LiuJunTing
- * @Last Modified time: 2018-03-23 16:30:08
+ * @Last Modified time: 2018-03-26 14:23:51
  */
 
 /**
@@ -148,10 +148,24 @@ export default {
         // 提供给外部的删除元素方法
         async remove() {
             if (!this.targetData.formId) return this.$message.warning(`请选择要删除的表单`)
-            // 删除选中的元素
-            this.data.splice(this.data.findIndex(v => v.formId === this.targetData.formId), 1)
-            // 重新排序order
-            this.data.map((v, i) => { v.order = i + 1 })
+            try {
+                await this.$confirm(
+                    '此操作将删除所选表单, 是否继续?',
+                    '提示',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        confirmButtonClass: 'ljt-btn primary-btn',
+                        cancelButtonClass: 'ljt-btn tiffany-btn',
+                        type: 'warning'
+                    }
+                )
+                // 删除选中的元素
+                this.data.splice(this.data.findIndex(v => v.formId === this.targetData.formId), 1)
+                // 重新排序order
+                this.data.map((v, i) => { v.order = i + 1 })
+                this.$emit('row-click', {})
+            } catch (error) {} // eslint-disable-line
         }
     }
 }

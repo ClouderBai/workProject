@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-20 13:27:14 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-22 17:03:18
+ * @Last Modified time: 2018-03-27 13:59:47
  */
 /**
 |--------------------------------------------------
@@ -17,7 +17,7 @@
                 <span>{{title}}</span>
             </div>
             <!-- form-start -->
-            <el-form :model="userForm" :rules="rules" ref="userForm" label-width="134px">
+            <el-form :model="userForm" :rules="rules" ref="userForm" label-width="134px" :validate-on-rule-change="false">
                 <el-tabs v-model="activeName" type="card">
                     <!-- 基本信息-start -->
                     <el-tab-pane label="基本信息" name="last" class="paneStyle">
@@ -416,6 +416,7 @@ export default {
             }
             this.fileList = [] // 清除文件
             this.roleData = [] // 清空角色
+            this.$refs['userForm'].clearValidate() // 清空校验规则
 
             const payload = {
                 option,
@@ -574,14 +575,14 @@ export default {
                 const create = await createUser(data)
 
                 if (create.error) {
-                    this.$notify.error('创建失败')
+                    this.$message.error(`创建失败: ${create.error}`)
                     return false
                 }
 
-                this.$notify.success('创建成功')
+                this.$message.success('创建成功')
                 this.close(type.CONFIRM)
             } catch (error) {
-                this.$notify.error(error.message)
+                this.$message.error(`创建失败: ${error.message}`)
                 console.warn(`新建用户：${JSON.stringify(error)}`)
                 return
             } finally {
@@ -600,10 +601,10 @@ export default {
                 const data = this.userForm
                 console.log(JSON.stringify(data))
                 await updateUserInfo(data)
-                this.$notify.success('修改成功')
+                this.$message.success('修改成功')
                 this.close(type.CONFIRM)
             } catch (error) {
-                this.$notify.error('修改失败')
+                this.$message.error(`修改失败: ${error.message}`)
                 console.warn(`修改用户信息：${JSON.stringify(error)}`)
                 return
             } finally {
@@ -652,7 +653,7 @@ export default {
         getAvatarUrl(res) {
             this.userForm.baseInfo.avatarUri = res.filePath
         },
-        // 上传材料材料
+        // 上传材料
         async submitUpload(file, index) {
             try {
                 const formData = new FormData()
@@ -667,7 +668,7 @@ export default {
                 this.fileListEntity.push(elementFilelist(this.fileList, res)) // 转换成 element fileList格式
                 this.$message.success('上传成功')
             } catch (error) {
-                this.$message.error('上传失败')
+                this.$message.error(`上传失败: ${error.message}`)
                 console.warn(`上传材料：${error}`)
             }
         }

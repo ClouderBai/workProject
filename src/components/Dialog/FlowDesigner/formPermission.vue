@@ -2,7 +2,7 @@
  * @Author: zhanglianhao 
  * @Date: 2018-03-23 14:21:14 
  * @Last Modified by: zhanglianhao
- * @Last Modified time: 2018-03-23 17:56:14
+ * @Last Modified time: 2018-03-26 15:44:44
  */
 
 /**
@@ -30,11 +30,11 @@
  
 <template>
     <div class="permission-form-container">
-        <el-dialog :title="title" :visible="visible" @close="close" append-to-body>
+        <el-dialog :title="title" :visible="visible" @close="close" append-to-body v-if="visible">
             <ul class="form-baseinfo">
                 <li>
                     <span>当前节点：</span>
-                    <p>{{ formData.belongedToNodeDisplayName || '未填写' }}</p>
+                    <p>{{ currentDom || '未填写' }}</p>
                 </li>
                 <li>
                     <span>表单编码：</span>
@@ -46,7 +46,7 @@
                 </li>
                 <li>
                     <span>所属节点：</span>
-                    <p>{{ formData.belongedToNodeName || '未填写' }}</p>
+                    <p>{{ formData.belongedToNodeDisplayName || '未填写' }}</p>
                 </li>
                 <li>
                     <span>设置全部权限：</span>
@@ -58,7 +58,7 @@
                 </li>
             </ul>
             <!-- form-element-form -->
-            <permission-table :data="formElementData" :permission="permissionType" @permission="onPermission"></permission-table>
+            <permission-table :data="formElementData" :permission="permissionType" @permission="onPermission" ref="permissionTable"></permission-table>
             <!-- 确认取消 -->
             <div slot="footer" class="dialog-footer">
                 <el-button class="ljt-btn tiffany-btn" @click="cancel">取 消</el-button>
@@ -87,7 +87,8 @@ export default {
             },
             formData: {}, // 表单数据
             formElementData: [], // 表单元素数据
-            permissionType: '' // 权限类型
+            permissionType: '', // 权限类型
+            currentDom: '' // 当前节点
         }
     },
     methods: {
@@ -103,7 +104,8 @@ export default {
                     this.formData = v
                 }
             })
-            this.formElementData = this.formData.formElements
+            this.currentDom = nodeData.label // 获取当前节点
+            this.formElementData = this.formData.formElements // 获取表单元素数据
         },
         close(option = DialogOptions.CLOSE, data) {
             if (!this.visible) return
@@ -127,6 +129,7 @@ export default {
         permissionChange(type) {
             this.permissionType = type
         },
+        // 权限赋值
         onPermission(val) {
             this.formData.formElements.forEach((v, i) => {
                 v.formElementAuthority = val[i]
