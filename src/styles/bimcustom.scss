@@ -1,0 +1,405 @@
+/* @author: gaoliang
+ * @date: 2018-01-24
+ * @desc: bim定制样式
+*/
+
+// $borderLineColor: 1px solid #ebebeb;
+// @mixin box-shadowsnone ($sizing) {
+//   -webkit-box-shadow: $sizing;
+//   -moz-box-shadow: $sizing;
+//   box-shadow: $sizing;
+// }
+
+$distance5:5px;
+$distance10:10px;
+$distance15:15px;
+$distance20:20px;
+$distance25:25px;
+$distance30:30px;
+//bridge定义
+.mt5 {
+  margin-top: $distance5;
+}
+
+.mr5 {
+  margin-right: $distance5;
+}
+
+.mb5 {
+  margin-bottom: $distance5;
+}
+
+.ml5 {
+  margin-left: $distance5;
+}
+
+.pt5 {
+  padding-top: $distance5;
+}
+
+.pr5 {
+  padding-right: $distance5;
+}
+
+.pb5 {
+  padding-bottom: $distance5;
+}
+
+.pl5 {
+  padding-left: $distance5;
+}
+
+.mt10 {
+  margin-top: $distance10;
+}
+
+.mr10 {
+  margin-right: $distance10;
+}
+
+.mb10 {
+  margin-bottom: $distance10;
+}
+
+.ml10 {
+  margin-left: $distance10;
+}
+
+.pt10 {
+  padding-top: $distance10;
+}
+
+.pr10 {
+  padding-right: $distance10;
+}
+
+.pb10 {
+  padding-bottom: $distance10;
+}
+
+.pl10 {
+  padding-left: $distance10;
+}
+
+.mt15 {
+  margin-top: $distance15;
+}
+
+.mr15 {
+  margin-right: $distance15;
+}
+
+.mb15 {
+  margin-bottom: $distance15;
+}
+
+.ml15 {
+  margin-left: $distance15;
+}
+
+.pt15 {
+  padding-top: $distance15;
+}
+
+.pr15 {
+  padding-right: $distance15;
+}
+
+.pb15 {
+  padding-bottom: $distance15;
+}
+
+.pl15 {
+  padding-left: $distance15;
+}
+
+.mt20 {
+  margin-top: $distance20;
+}
+
+.mr20 {
+  margin-right: $distance20;
+}
+
+.mb20 {
+  margin-bottom: $distance20;
+}
+
+.ml20 {
+  margin-left: $distance20;
+}
+
+.pt20 {
+  padding-top: $distance20;
+}
+
+.pr20 {
+  padding-right: $distance20;
+}
+
+.pb20 {
+  padding-bottom: $distance20;
+}
+
+.pl20 {
+  padding-left: $distance20;
+}
+
+.mt25 {
+  margin-top: $distance25;
+}
+
+.mr25 {
+  margin-right: $distance25;
+}
+
+.mb25 {
+  margin-bottom: $distance25;
+}
+
+.ml25 {
+  margin-left: $distance25;
+}
+
+.pt25 {
+  padding-top: $distance25;
+}
+
+.pr25 {
+  padding-right: $distance25;
+}
+
+.pb25 {
+  padding-bottom: $distance25;
+}
+
+.pl25 {
+  padding-left: $distance25;
+}
+
+.mt30 {
+  margin-top: $distance30;
+}
+
+.mr30 {
+  margin-right: $distance30;
+}
+
+.mb30 {
+  margin-bottom: $distance30;
+}
+
+.ml30 {
+  margin-left: $distance30;
+}
+.pt30 {
+  padding-top: $distance30;
+}
+
+.pr30 {
+  padding-right: $distance30;
+}
+
+.pb30 {
+  padding-bottom: $distance30;
+}
+
+.pl30 {
+  padding-left: $distance30;
+}
+
+.mlr10 {
+  margin-left: $distance10;
+  margin-right: $distance10;
+}
+
+.plr20 {
+  padding-left: $distance20;
+  padding-right: $distance20;
+}
+
+.plr10 {
+  padding-left: $distance10;
+  padding-right: $distance10;
+}
+.fr {float:right}
+.fl {float:left}
+// 居中
+.tac {
+  text-align: center;
+}
+
+
+//展示详情列表使用
+.bim-list1{
+  font-size:12px;
+  line-height:42px;
+  margin:0;padding:0;
+  li.float{
+      width:50%;
+      float:left;
+      position:relative;
+      border-bottom:1px solid #e4e7ed;
+      list-style: none;
+      strong.title{display:inline-block;width:60px;position:absolute;top:0;left:0;}
+      p.content{display:block;margin:0;margin-left:60px;margin-right:10px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;line-height: 42px;}
+  }
+  li.nofloat{
+      border-bottom:1px solid #e4e7ed;
+      margin-left:10px;margin-right:10px;
+      list-style: none;
+      position:relative;
+      strong.title{display:inline-block;width:80px;position:absolute;top:0;left:0;}
+      p.content{display:block;margin:0;margin-left:80px;padding:0;margin-right:10px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+  }
+}
+.bimList2{
+  font-size:12px;
+  padding:0;
+  // margin-bottom: -10px;
+  li.float{
+      width:50%;
+      list-style: none;
+      float:left;
+      position:relative;
+    
+  }
+  li.nofloat{
+      list-style: none;
+      position:relative;
+      .el-input--medium{width: 300px;}
+  }
+}
+
+.bimList3{
+  position:relative;
+  font-size:12px;
+  margin:0 20px;
+  border-bottom: 1px dashed #ccc;
+  padding:30px 0 0 0;     
+  li{
+      width:50%;
+      list-style: none;
+      float:left;
+      position:relative;
+  }
+  .bimicon-roundclose{
+      position: absolute;
+      z-index: 90;
+      font-size: 40px;
+      bottom: 55px;
+      color: #dcdfe6;
+       &:hover{
+          color: #ff0000;
+      }
+  }
+}
+.bim-dialog1{
+  .el-dialog__header {
+     padding-left: 20px;
+     padding-right: 20px;
+      padding-bottom:0px;
+      padding-top:0;
+      span {line-height:49px;}
+  }
+  .el-dialog__body{
+      padding-top: 20px;
+  }
+  .addbtn{
+      .reset-btn{
+              width: 60px!important;
+              height: 60px!important;
+              .bimicon-friendadd{
+                  font-size: 40px;
+                  position: relative;
+                  bottom: 2px;
+                  right: 10px;
+              }
+      }
+  }
+  
+  
+}
+// 删除
+.bimList4{
+  font-size:12px;
+  margin:0;padding:0;
+      li.float{
+          width:50%;
+          list-style: none;
+          float:left;
+          position:relative;
+          .uploadbtn{
+              margin-left: 10px;
+              .revise-btn{
+                  width:200px!important;
+                  height: 200px!important;
+                  margin-bottom:30px;
+                  text-align: center;
+                  .bimicon-friendadd{                
+                      position: relative;
+                      bottom: 2px;
+                      font-size: 80px;
+                      left: 2px;
+                  }
+              }
+          }
+      }
+}
+
+// .bim-dialog1 {
+//   .el-dialog__header {
+//     padding-left: 20px;
+//     padding-right: 20px;
+//     padding-bottom: 0px;
+//     padding-top: 0;
+//     span {
+//       line-height: 49px;
+//     }
+//     &::after {
+//       content: '';
+//       display: block;
+//       background: #ccc;
+//       height: 1px;
+//       line-height: 0;
+//       overflow: hidden;
+//     }
+//   }
+//   .online {
+//     padding-bottom: 0px;
+//     padding-top: 0;
+//     span {
+//       line-height: 49px;
+//     }
+//     &::after {
+//       content: '';
+//       display: block;
+//       background: #ccc;
+//       height: 1px;
+//       line-height: 0;
+//       overflow: hidden;
+//     }
+//   }
+// }
+
+// .bim-list2 {
+//   font-size: 12px;
+//   margin: 0;
+//   padding: 0;
+//   li.float {
+//     width: 50%;
+//     list-style: none;
+//     float: left;
+//     position: relative;
+//   }
+//   li.nofloat {
+//     list-style: none;
+//     position: relative;
+//     .el-input{
+//       width: 300px;
+//     }
+//   }
+// }
+
+
+
